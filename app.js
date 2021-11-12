@@ -81,3 +81,133 @@ const menu = [
     desc: `Red bean paste dessert, serving with honey.`,
   },
 ];
+
+class kitchenMenu{
+  constructor({btnContainer, sectionContainer, data, allText = "All"}) {
+    this.btnContainer = btnContainer
+    this.sectionContainer = sectionContainer
+    this.data = data
+    this.allText = allText
+
+    this.kategoriler = [allText, ...new Set(data.map(i => i.category))]
+
+    this.init();
+
+  }
+
+  butonlariOlustur () {
+
+    this.kategoriler.map(kategori=>{
+      const btn = document.createElement('button')
+  
+      btn.classList = 'btn btn-outline-dark btn-item'
+      btn.innerText = kategori
+      
+  
+      btn.addEventListener('click',(e) => {
+  
+        this.sectionContainer.innerHTML = ''
+        const filterMenu = this.data.filter(item => item.category === kategori || kategori === this.allText)
+  
+        
+        this.menuOlustur(filterMenu)
+  
+      })
+  
+      this.btnContainer.appendChild(btn)
+  
+  
+    })
+
+  }
+
+
+  render ({img, title, price, desc}) {
+    const item = document.createElement('div')
+    item.classList = 'menu-items col-lg-6 col-sm-12'
+
+    item.innerHTML = `<img class="photo" src="${img}" alt="">
+    <div class="menu-info">
+      <div class="menu-title">
+        <h4>${title}</h4>
+        <h4>${price}</h4>
+      </div>
+      <div class="menu-text">
+        ${desc}
+      </div>
+    </div>`
+
+    return item
+  }
+
+
+  menuOlustur(data){
+    menu.map(item => this.sectionContainer.appendChild(this.render(item)))
+  }
+
+  init(){
+    this.butonlariOlustur()
+    this.menuOlustur(this.data)
+  }
+
+}
+
+
+document.addEventListener("DOMContentLoaded", ()=>{
+
+  const btnContainer = document.querySelector('.btn-container')
+  const sectionContainer = document.querySelector('.section-center')
+
+  new kitchenMenu({
+    btnContainer: btnContainer,
+    sectionContainer: sectionContainer,
+    data: menu,
+    allText : 'Hepsi'
+
+  })
+
+
+  // const kategoriler = ['All', ...new Set(menu.map(i => i.category))]
+
+  // kategoriler.map(kategori=>{
+  //   const btn = document.createElement('button')
+
+  //   btn.classList = 'btn btn-outline-dark btn-item'
+  //   btn.innerText = kategori
+
+  //   btn.addEventListener('click',(e) => {
+
+  //     sectionContainer.innerHTML = ''
+  //     const filterMenu = menu.filter(item => item.category === kategori || kategori === "All")
+
+  //     filterMenu.map(item => sectionContainer.appendChild(render(item)))
+
+  //   })
+
+  //   btnContainer.appendChild(btn)
+
+
+  // })
+
+  // const render = ({img, title, price, desc}) =>{
+
+  //   const item = document.createElement('div')
+  //   item.classList = 'menu-items'
+
+  //   item.innerHTML = `<img class="photo" src="${img}" alt="">
+  //   <div class="menu-info">
+  //     <div class="menu-title">
+  //       <h4>${title}</h4>
+  //       <h4>${price}</h4>
+  //     </div>
+  //     <div class="menu-text">
+  //       ${desc}
+  //     </div>
+  //   </div>`
+
+  //   return item
+  // }
+
+  // menu.map(item => sectionContainer.appendChild(render(item)))
+
+})
